@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+    CREATE USER zulip;
+    CREATE DATABASE zulip;
+    GRANT ALL PRIVILEGES ON DATABASE zulip TO zulip;
+    CREATE SCHEMA IF NOT EXISTS zulip AUTHORIZATION zulip;
+    CREATE EXTENSION IF NOT EXISTS unaccent SCHEMA zulip;
+    CREATE EXTENSION IF NOT EXISTS tsearch_extras SCHEMA zulip;
+EOSQL
